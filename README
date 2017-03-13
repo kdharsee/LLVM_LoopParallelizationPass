@@ -1,0 +1,23 @@
+Name: Komail Dharsee
+Course: csc455
+Instructor: Chen Ding
+
+Assignment 3
+
+Dominator Relations are kept in a StringMap structure which are keyed based off the dominatee BB names, with values of the Sets of the Dominator BB names.
+Back Edge Relations are stored in a DenseSet as pairs of BB names, where the first BB in the pair points to the second within the CFG.
+Natural Loops were stored in a very complicated DenseMap structure, keyed by the back_edge pairs, with values of Sets of Strings holding BB names invovled in the Natural loop.
+An additional sturcture was kept to store mappings between BB names and their corresponding BasicBlock pointer types.
+
+The algorithm implemented for calculating the dominance relations is as found in the "Engineering a Compiler" textbook -- "an iterative solver for dominance".
+
+Back edges and natural loops were calculated following the definitions from the CMU slides, which are as follows: Back edges are "arc[s] whos head[s] dominate [their] tail[s]". "A Natural Loop of a back edge is the smallest set of nodes that includes the head and tail of the back edge, and has no predecessors outside the set, except for the predecessors of the header."
+
+In implementing the calculation of the back edges, we loop through the list of dominance relations, and check if any dominator has an edge coming from a dominatee; if this is the case, then that edge is labeled as a back edge, and stored in the global structure.
+
+The calculation Natural Loops was implemented by 'hiding' the head of the loop from the graph, and performing PostOrder traversals of the CFG from each node. If there existed a path between the BB and the tail of the natural loop, the BB was added to the set of nodes invovled. 
+
+Three tests in total were conducted:
+The provided test.c
+Two tests in test2.c:
+	These tests involved a nested loop with branching a if statement, in addition to two successive loops (non-nested)
